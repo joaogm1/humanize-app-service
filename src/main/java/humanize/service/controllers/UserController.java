@@ -1,6 +1,7 @@
 package humanize.service.controllers;
 
 import humanize.service.dtos.CreateUserRequest;
+import humanize.service.dtos.LoginRequest;
 import humanize.service.dtos.UserResponse;
 import humanize.service.services.UserService;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,12 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponse(e.getMessage()));
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Boolean> login(@RequestBody LoginRequest request) {
+        boolean isAuthenticated = userService.authenticateUser(request);
+        return ResponseEntity.ok(isAuthenticated);
     }
 
     @GetMapping("/{login}")

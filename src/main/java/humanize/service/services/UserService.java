@@ -1,6 +1,7 @@
 package humanize.service.services;
 
 import humanize.service.dtos.CreateUserRequest;
+import humanize.service.dtos.LoginRequest;
 import humanize.service.dtos.UserResponse;
 import humanize.service.entities.UserEntity;
 import humanize.service.repositories.UserRepository;
@@ -70,6 +71,20 @@ public class UserService {
                 .username(user.getUsername())
                 .cpf(user.getCpf())
                 .build();
+    }
+
+    public boolean authenticateUser(LoginRequest request) {
+        // Buscar usuário pelo username
+        UserEntity user = userRepository.findByUsername(request.getUsername())
+                .orElse(null);
+
+        // Se usuário não existe, retorna false
+        if (user == null) {
+            return false;
+        }
+
+        // Verificar se a senha está correta
+        return user.getPassword().equals(request.getPassword());
     }
 
     //Validação básica de CPF

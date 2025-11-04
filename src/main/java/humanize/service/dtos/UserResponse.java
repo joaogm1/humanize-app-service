@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateUserRequest {
+public class UserResponse {
+    private String id;
     private String name;
     private String username;
-    private String password;
     private String cpf;
-    private String role;
+    private String role; // <-- retornado nas respostas da API
 }

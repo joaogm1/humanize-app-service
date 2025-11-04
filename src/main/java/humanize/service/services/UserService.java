@@ -39,12 +39,18 @@ public class UserService {
             throw new RuntimeException("CPF inválido!");
         }
 
+        // Se o role não vier do front, define padrão "GESTANTE"
+        String role = (request.getRole() == null || request.getRole().trim().isEmpty())
+                ? "GESTANTE"
+                : request.getRole();
+
         // Criar entidade
         UserEntity userEntity = UserEntity.builder()
                 .name(request.getName())
                 .username(request.getUsername())
-                .password(request.getPassword()) // TODO: Criptografar depois!
+                .password(request.getPassword()) // TODO: criptografar depois
                 .cpf(request.getCpf())
+                .role(role) // adiciona o tipo de usuário
                 .build();
 
         // Salvar no banco
@@ -58,6 +64,7 @@ public class UserService {
                 .name(savedUser.getName())
                 .username(savedUser.getUsername())
                 .cpf(savedUser.getCpf())
+                .role(savedUser.getRole()) // devolve o papel do usuário
                 .build();
     }
 
@@ -70,39 +77,28 @@ public class UserService {
                 .name(user.getName())
                 .username(user.getUsername())
                 .cpf(user.getCpf())
+                .role(user.getRole())
                 .build();
     }
 
     public boolean authenticateUser(LoginRequest request) {
-        // Buscar usuário pelo username
         UserEntity user = userRepository.findByUsername(request.getUsername())
                 .orElse(null);
 
-        // Se usuário não existe, retorna false
         if (user == null) {
             return false;
         }
 
-        // Verificar se a senha está correta
         return user.getPassword().equals(request.getPassword());
     }
 
-    //Validação básica de CPF
+    // Validação básica de CPF
     private boolean isValidCpf(String cpf) {
-        // Remove caracteres não numéricos
         cpf = cpf.replaceAll("[^0-9]", "");
 
-        // Verifica se tem 11 dígitos
-        if (cpf.length() != 11) {
-            return false;
-        }
-
-        // Verifica se não são todos iguais (ex: 111.111.111-11)
-        if (cpf.matches("(\\d)\\1{10}")) {
-            return false;
-        }
+        if (cpf.length() != 11) return false;
+        if (cpf.matches("(\\d)\\1{10}")) return false;
 
         return true;
-        // Para validação completa com dígitos verificadores, seria mais complexo
     }
 }

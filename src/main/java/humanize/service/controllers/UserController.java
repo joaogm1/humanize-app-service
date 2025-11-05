@@ -44,6 +44,5 @@ public class UserController {
         }
     }
 
-    // Classe interna para erros
     private record ErrorResponse(String message) {}
 }

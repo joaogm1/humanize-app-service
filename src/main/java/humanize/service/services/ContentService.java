@@ -92,4 +92,35 @@ public class ContentService {
                 .updatedAt(entity.getUpdatedAt().toString())
                 .build();
     }
+
+    // FILTRAR POR ROLE
+public List<ContentResponse> getByRole(String role) {
+    return contentRepository.findByRole(role).stream()
+            .map(this::toResponse)
+            .collect(Collectors.toList());
+}
+
+// FILTRAR POR CATEGORIA
+public List<ContentResponse> getByCategory(String category) {
+    return contentRepository.findByCategory(category).stream()
+            .map(this::toResponse)
+            .collect(Collectors.toList());
+}
+
+// FILTRAR POR TRIMESTRE
+public List<ContentResponse> getByTrimester(Integer trimester) {
+    return contentRepository.findByTrimester(trimester).stream()
+            .map(this::toResponse)
+            .collect(Collectors.toList());
+}
+
+// FILTRAR POR SEMANA (lex range start/end)
+public List<ContentResponse> getByWeek(Integer week) {
+    return contentRepository
+            .findByWeekRangeStartLessThanEqualAndWeekRangeEndGreaterThanEqual(week, week)
+            .stream()
+            .map(this::toResponse)
+            .collect(Collectors.toList());
+}
+
 }

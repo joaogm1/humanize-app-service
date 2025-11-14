@@ -42,4 +42,28 @@ public class ContentController {
         contentService.deleteContent(id);
         return ResponseEntity.noContent().build();
     }
+    // GET por role
+@GetMapping("/role/{role}")
+public ResponseEntity<List<ContentResponse>> getByRole(@PathVariable String role) {
+    return ResponseEntity.ok(contentService.getByRole(role));
+}
+
+// GET por categoria
+@GetMapping("/category/{category}")
+public ResponseEntity<List<ContentResponse>> getByCategory(@PathVariable String category) {
+    return ResponseEntity.ok(contentService.getByCategory(category));
+}
+
+// GET por trimestre
+@GetMapping("/trimester/{trimester}")
+public ResponseEntity<List<ContentResponse>> getByTrimester(@PathVariable Integer trimester) {
+    return ResponseEntity.ok(contentService.getByTrimester(trimester));
+}
+
+// GET por semana gestacional (busca range)
+@GetMapping("/week/{week}")
+public ResponseEntity<List<ContentResponse>> getByWeek(@PathVariable Integer week) {
+    return ResponseEntity.ok(contentService.getByWeek(week));
+}
+
 }
